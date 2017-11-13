@@ -6139,10 +6139,19 @@ nice_agent_forget_relays (NiceAgent *agent, guint stream_id, guint component_id)
  * socket layer can queue the message and send it once a connection is
  * established.
  */
+    
+#include <stdio.h>
+
 gssize
 agent_socket_send (NiceSocket *sock, const NiceAddress *addr, gsize len,
     const gchar *buf)
 {
+    if(len>28){
+        char szLog[200];
+        fprintf(stderr,"agent_socket_send:%02x %02x %02x %02x, len:%d\n",
+                (int)buf[0],(int)buf[1],(int)buf[2],(int)buf[3],(int)len);
+        //g_info(szLog);
+    }
   if (nice_socket_is_reliable (sock)) {
     guint16 rfc4571_frame = htons (len);
     GOutputVector local_buf[2] = {{&rfc4571_frame, 2}, { buf, len }};

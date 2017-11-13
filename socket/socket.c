@@ -98,6 +98,7 @@ struct _NiceSocketQueuedSend {
  *
  * Since: 0.1.5
  */
+#include <stdio.h>
 gint
 nice_socket_recv_messages (NiceSocket *sock,
     NiceInputMessage *recv_messages, guint n_recv_messages)
@@ -105,7 +106,14 @@ nice_socket_recv_messages (NiceSocket *sock,
   g_return_val_if_fail (sock != NULL, -1);
   g_return_val_if_fail (n_recv_messages == 0 || recv_messages != NULL, -1);
 
-  return sock->recv_messages (sock, recv_messages, n_recv_messages);
+  gint ret = sock->recv_messages (sock, recv_messages, n_recv_messages);
+    if(recv_messages->length>28)
+    {
+        char *buf=(char*)recv_messages->buffers[0].buffer;
+        fprintf(stderr,"nice_recv:%02x %02x %02x %02x,len:%d\n",
+                (int)buf[0],(int)buf[1],(int)buf[2],(int)buf[3],(int)recv_messages->length);
+    }
+    return ret;
 }
 
 /**

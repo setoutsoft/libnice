@@ -92,14 +92,18 @@ main(int argc, char *argv[])
     fprintf(stderr, "Usage: %s 0|1 stun_addr [stun_port]\n", argv[0]);
     return EXIT_FAILURE;
   }
-
+    fprintf(stderr, "Usage: %s 0|1 stun_addr [stun_port]\n", argv[0]);
+    
+    g_setenv("G_MESSAGE_DEBUG","all",1);
+    nice_debug_enable(1);
+    
   if (argc > 2) {
     stun_addr = argv[2];
     if (argc > 3)
       stun_port = atoi(argv[3]);
     else
       stun_port = 3478;
-
+      
     g_debug("Using stun server '[%s]:%u'\n", stun_addr, stun_port);
   }
 
